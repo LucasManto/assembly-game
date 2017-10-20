@@ -5,6 +5,28 @@ loadn r3, #'s'          ; Armazena caractere 's' para comparacao
 loadn r4, #'d'          ; Armazena caractere 'd' para comparacao
 loadn r5, #' '          ; Armazena caractere ' ' para comparacao
 
+rand: var #50
+	static rand + #0, #11
+	static rand + #18, #12
+	static rand + #12, #13
+	static rand + #16, #14
+	static rand + #13, #15
+	static rand + #10, #16
+	static rand + #4, #17
+	static rand + #6, #18
+	static rand + #14, #19
+	static rand + #11, #20
+	static rand + #15, #21
+	static rand + #17, #22
+	static rand + #2, #23
+	static rand + #8, #24
+	static rand + #7, #25
+	static rand + #1, #26
+	static rand + #5, #27
+	static rand + #3, #28
+	static rand + #9, #29
+	
+
 printHighway:
 	push r0
 	push r1
@@ -35,8 +57,30 @@ main:
     ceq moveCarD        ; Se for igual, movimenta o carro para baixo
     cmp r7, r4          ; Compara o valor lido com 'd'
     ceq moveCarR        ; Se for igual, movimenta o carro para a direita
+	
+	call printObst
 
 jmp main
+
+printObst:
+	push r0
+	push r1
+	push r2
+	push r3
+	loadn r0, #rand
+	loadn r2, #'O'
+	loadn r3, #12
+printObstAgain:	
+	loadi r1, r0
+	outchar r2, r1
+	inc r0
+	cmp r1, r3
+	jne printObstAgain
+	pop r3
+	pop r2
+	pop r1
+	pop r0
+	rts
 
 printCar:
     push r6
