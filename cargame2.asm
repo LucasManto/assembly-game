@@ -5,10 +5,27 @@ loadn r3, #'s'          ; Armazena caractere 's' para comparacao
 loadn r4, #'d'          ; Armazena caractere 'd' para comparacao
 loadn r5, #' '          ; Armazena caractere ' ' para comparacao
 
-jmp main
+printHighway:
+	push r0
+	push r1
+	push r2
+	loadn r2, #9
+	loadn r7, #31
+	loadn r0, #'|'
+	loadn r1, #40
+	loadn r6, #1231
+printAgain:
+	outchar r0, r2
+	outchar r0, r7
+	add r2, r2, r1
+	add r7, r7, r1
+	cmp r7, r6
+	jne printAgain
+	pop r2
+	pop r1
+	pop r0
 
 main:
-
     inchar r7           ; Le um valor do teclado e coloca em r7
     cmp r7, r1          ; Compara o valor lido com 'w'
     ceq moveCarT        ; Se for igual, movimenta o carro para cima
@@ -58,7 +75,7 @@ moveCarL:
     loadn r6, #40
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #10       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
+    cmp r7, r6          ; Compara se a posicao é igual ao valor
     jeq dontMoveL       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -92,7 +109,7 @@ moveCarR:
 
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #30       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
+    cmp r7, r6          ; Compara se a posicao é igual ao valor
     jeq dontMoveR       ; Nao realiza a movimentacao
 
     call eraseCar
