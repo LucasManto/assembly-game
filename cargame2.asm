@@ -132,7 +132,7 @@ moveCarL:
     loadn r6, #40
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #10       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao é igual ao valor
+    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
     jeq dontMoveL       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -166,7 +166,7 @@ moveCarR:
 
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #30       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao é igual ao valor
+    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
     jeq dontMoveR       ; Nao realiza a movimentacao
 
     call eraseCar
