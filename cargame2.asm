@@ -1,11 +1,6 @@
 loadn r0, #1099         ; Posicao inicial
-loadn r1, #'w'          ; Armazena caractere 'w' para comparacao
-loadn r2, #'a'          ; Armazena caractere 'a' para comparacao
-loadn r3, #'s'          ; Armazena caractere 's' para comparacao
-loadn r4, #'d'          ; Armazena caractere 'd' para comparacao
-loadn r5, #' '          ; Armazena caractere ' ' para comparacao
 
-rand: var #50
+rand: var #20
 	static rand + #0, #11
 	static rand + #18, #12
 	static rand + #12, #13
@@ -25,6 +20,13 @@ rand: var #50
 	static rand + #5, #27
 	static rand + #3, #28
 	static rand + #9, #29
+	
+objs: var #5
+	static objs + #0, #20
+	static objs + #1, #56
+	static objs + #2, #13
+	static objs + #3, #66
+	static objs + #4, #28
 	
 
 printHighway:
@@ -48,39 +50,50 @@ printAgain:
 	pop r0
 
 main:
-    inchar r7           ; Le um valor do teclado e coloca em r7
-    cmp r7, r1          ; Compara o valor lido com 'w'
-    ceq moveCarT        ; Se for igual, movimenta o carro para cima
-    cmp r7, r2          ; Compara o valor lido com 'a'
-    ceq moveCarL        ; Se for igual, movimenta o carro para a eraseCar
-    cmp r7, r3          ; Compara o valor lido com 's'
-    ceq moveCarD        ; Se for igual, movimenta o carro para baixo
-    cmp r7, r4          ; Compara o valor lido com 'd'
-    ceq moveCarR        ; Se for igual, movimenta o carro para a direita
 	
-	call printObst
+incObs:
+	call Delay
+	call printObj
+	call moveCar
+	inc r7
 
 jmp main
 
-printObst:
-	push r0
+printObj:
 	push r1
 	push r2
 	push r3
-	loadn r0, #rand
-	loadn r2, #'O'
-	loadn r3, #12
-printObstAgain:	
-	loadi r1, r0
-	outchar r2, r1
-	inc r0
-	cmp r1, r3
-	jne printObstAgain
+	push r4
+	push r5
+	push r6
+	push r7
+	
+	loadn r1, #0
+	loadn r2, #5
+	loadn r3, #objs
+	loadn r5, #'0'
+	loadn r6, #40
+	loadn r7, #' '
+	
+incCountPrintObj:
+	loadi r4, r3
+	outchar r7, r4
+	add r4, r4, r6
+	outchar r5, r4
+	storei r3, r4
+	inc r3
+	inc r1
+	cmp r1, r2
+	jne incCountPrintObj
+	
+	pop r7
+	pop r6
+	pop r5
+	pop r4
 	pop r3
 	pop r2
 	pop r1
-	pop r0
-	rts
+rts
 
 printCar:
     push r6
@@ -119,7 +132,7 @@ moveCarL:
     loadn r6, #40
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #10       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao é igual ao valor
+    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
     jeq dontMoveL       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -153,7 +166,7 @@ moveCarR:
 
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #30       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao é igual ao valor
+    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
     jeq dontMoveR       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -170,4 +183,67 @@ eraseCar:
     add r0, r0, r7      ; Soma 40 a posicao para imprimir na linha de baixo
     outchar r5, r0      ; Apaga a segunda parte do carro
     sub r0, r0, r7      ; Decrementa 40 para voltar a linha de cima
+rts
+
+
+Delay:
+	push r1
+	push r2
+	push r3
+	
+	loadn r2, #3
+	loadn r3, #0
+	
+loadR1:
+	loadn r1, #1000
+	
+decR1:
+	dec r1
+	cmp r1, r3
+	jne decR1
+	
+	dec r2
+	cmp r2, r3
+	jne loadR1
+	
+	pop r3
+	pop r2
+	pop r1
+	
+
+rts
+
+moveCar:
+	
+	push r1
+	push r2
+	push r3
+	push r4
+	push r5
+	
+	loadn r1, #'w'          ; Armazena caractere 'w' para comparacao
+	loadn r2, #'a'          ; Armazena caractere 'a' para comparacao
+	loadn r3, #'s'          ; Armazena caractere 's' para comparacao
+	loadn r4, #'d'          ; Armazena caractere 'd' para comparacao
+	loadn r5, #' '          ; Armazena caractere ' ' para comparacao
+
+	
+	call printCar
+
+    inchar r7           ; Le um valor do teclado e coloca em r7
+    cmp r7, r1          ; Compara o valor lido com 'w'
+    ceq moveCarT        ; Se for igual, movimenta o carro para cima
+    cmp r7, r2          ; Compara o valor lido com 'a'
+    ceq moveCarL        ; Se for igual, movimenta o carro para a eraseCar
+    cmp r7, r3          ; Compara o valor lido com 's'
+    ceq moveCarD        ; Se for igual, movimenta o carro para baixo
+    cmp r7, r4          ; Compara o valor lido com 'd'
+    ceq moveCarR        ; Se for igual, movimenta o carro para a direita
+	
+	pop r5
+	pop r4
+	pop r3
+	pop r2
+	pop r1
+	
 rts
