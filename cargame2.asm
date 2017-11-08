@@ -1,4 +1,6 @@
-loadn r0, #1099         ; Posicao inicial
+Inicio:
+	loadn r0, #1099         ; Posicao inicial
+	loadn r1, #0
 
 rand: var #20
 	static rand + #0, #11
@@ -26,8 +28,7 @@ objs: var #5
 	static objs + #1, #56
 	static objs + #2, #13
 	static objs + #3, #66
-	static objs + #4, #28
-	
+	static objs + #4, #28	
 
 printHighway:
 	push r0
@@ -80,6 +81,8 @@ incCountPrintObj:
 	outchar r7, r4
 	add r4, r4, r6
 	outchar r5, r4
+	cmp r4, r0
+	jeq Lose
 	storei r3, r4
 	inc r3
 	inc r1
@@ -89,10 +92,14 @@ incCountPrintObj:
 	pop r7
 	pop r6
 	pop r5
+	loadn r2, #1160
+	cmp r4, r2
 	pop r4
 	pop r3
 	pop r2
 	pop r1
+	cgr LoadVector	
+	
 rts
 
 printCar:
@@ -247,3 +254,70 @@ moveCar:
 	pop r1
 	
 rts
+
+LoadVector:
+	push r2
+	push r3
+	push r4
+	push r5
+	push r6
+	
+	loadn r2, #rand
+	add r2, r2, r1
+	
+	loadn r3, #0
+	loadn r4, #5
+	loadn r5, #objs
+
+IncLoadVector:
+	inc r1
+	inc r3
+	loadi r6, r2
+	inc r2
+	storei r5, r6
+	inc r5
+	cmp r3, r4
+	jne IncLoadVector
+	
+	pop r6
+	pop r5
+	pop r4
+	pop r3
+	pop r2
+rts
+
+Lose:
+	call eraseCar
+	
+	loadn r0, #0
+	loadn r1, #1200
+	loadn r2, #' '
+	
+IncApagaTela:
+	outchar r2, r0
+	inc r0
+	cmp r0, r1
+	jne IncApagaTela
+	
+	loadn r0, #objs
+	
+	loadn r1, #20	
+	storei r0, r1
+	inc r0
+	
+	loadn r1, #56	
+	storei r0, r1
+	inc r0
+	
+	loadn r1, #13	
+	storei r0, r1
+	inc r0
+	
+	loadn r1, #66
+	storei r0, r1
+	inc r0
+	
+	loadn r1, #28
+	storei r0, r1	
+	
+	jmp Inicio
