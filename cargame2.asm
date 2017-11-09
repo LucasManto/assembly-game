@@ -1,34 +1,62 @@
-Inicio:
+	Inicio:
 	loadn r0, #1099         ; Posicao inicial
 	loadn r1, #0
 
-rand: var #20
-	static rand + #0, #11
-	static rand + #18, #12
-	static rand + #12, #13
-	static rand + #16, #14
-	static rand + #13, #15
-	static rand + #10, #16
-	static rand + #4, #17
-	static rand + #6, #18
-	static rand + #14, #19
-	static rand + #11, #20
-	static rand + #15, #21
-	static rand + #17, #22
-	static rand + #2, #23
-	static rand + #8, #24
-	static rand + #7, #25
-	static rand + #1, #26
-	static rand + #5, #27
-	static rand + #3, #28
-	static rand + #9, #29
+rand: var #40
+	static rand + #0, #141
+	static rand + #1, #96
+	static rand + #2, #147
+	static rand + #3, #54
+	static rand + #4, #94
+	static rand + #5, #16
+	static rand + #6, #136
+	static rand + #7, #137
+	static rand + #8, #146
+	static rand + #9, #13
+	static rand + #10, #99
+	static rand + #11, #18
+	static rand + #12, #22
+	static rand + #13, #60
+	static rand + #14, #64
+	static rand + #15, #134
+	static rand + #16, #102
+	static rand + #17, #103
+	static rand + #18, #61
+	static rand + #19, #14
+	static rand + #20, #66
+	static rand + #21, #145
+	static rand + #22, #107
+	static rand + #23, #92
+	static rand + #24, #17
+	static rand + #25, #12
+	static rand + #26, #140
+	static rand + #27, #19
+	static rand + #28, #95
+	static rand + #29, #11
+	static rand + #30, #62
+	static rand + #31, #142
+	static rand + #32, #101
+	static rand + #33, #63
+	static rand + #34, #100
+	static rand + #35, #59
+	static rand + #36, #52
+	static rand + #37, #105
+	static rand + #38, #108
+	static rand + #39, #51
 	
-objs: var #5
-	static objs + #0, #20
-	static objs + #1, #56
-	static objs + #2, #13
-	static objs + #3, #66
-	static objs + #4, #28	
+objs: var #10
+	static objs + #0, #0
+	static objs + #1, #0
+	static objs + #2, #0
+	static objs + #3, #0
+	static objs + #4, #0	
+	static objs + #5, #0	
+	static objs + #6, #0	
+	static objs + #7, #0	
+	static objs + #8, #0	
+	static objs + #9, #0	
+	
+call LoadVector
 
 printHighway:
 	push r0
@@ -70,7 +98,7 @@ printObj:
 	push r7
 	
 	loadn r1, #0
-	loadn r2, #5
+	loadn r2, #10
 	loadn r3, #objs
 	loadn r5, #'0'
 	loadn r6, #40
@@ -92,7 +120,7 @@ incCountPrintObj:
 	pop r7
 	pop r6
 	pop r5
-	loadn r2, #1160
+	loadn r2, #1200
 	cmp r4, r2
 	pop r4
 	pop r3
@@ -139,7 +167,7 @@ moveCarL:
     loadn r6, #40
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #10       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
+    cmp r7, r6          ; Compara se a posicao é igual ao valor
     jeq dontMoveL       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -173,7 +201,7 @@ moveCarR:
 
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #30       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao Ã© igual ao valor
+    cmp r7, r6          ; Compara se a posicao é igual ao valor
     jeq dontMoveR       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -266,7 +294,7 @@ LoadVector:
 	add r2, r2, r1
 	
 	loadn r3, #0
-	loadn r4, #5
+	loadn r4, #10
 	loadn r5, #objs
 
 IncLoadVector:
@@ -279,11 +307,19 @@ IncLoadVector:
 	cmp r3, r4
 	jne IncLoadVector
 	
+	loadn r2, #40
+	cmp r1, r2
+	ceq Reset
+	
 	pop r6
 	pop r5
 	pop r4
 	pop r3
 	pop r2
+rts
+
+Reset:
+	loadn r1, #0
 rts
 
 Lose:
