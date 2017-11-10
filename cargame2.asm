@@ -1,8 +1,32 @@
-msgLose: string "You Lose!"
+msgLose: string "You Lose! - Press [Space] to continue"
+msgStart: string "Press [Space] to Start"
+msgScore: string "Score"
+msgWin: string "Voce venceu! Xupa Federupa!"
+
+linhaIni0: string "   `-------`                            "
+linhaIni1: string "   ohhhhhhho              .yyyyyyys     "
+linhaIni2: string ":::oyyhhhhho````````      :hhhhhhhh /// "
+linhaIni3: string "sssssshdhhhyssssssss/     -hhhhhhhh.yyy`"
+linhaIni4: string "ssssssydyssssssssssso`     ```s+`` `yyy`"
+linhaIni5: string "ssssssyyssssssysssyyyyso++//::s+.``.yyy`"
+linhaIni6: string "ssssssyyssssshdssyddddddsssssssssssssss:"
+linhaIni7: string "ssssssyyssssshdssyddddddsssssssssssssss:"
+linhaIni8: string "ssssssyyssssssysssyyyyso++//::s+.``.yyy`"
+linhaIni9: string "ssssssydyssssssssssso`     ```s+`` `yyy`"
+linhaIni10: string "sssssshdhhhyssssssss/     -hhhhhhhh.yyy`"
+linhaIni11: string ":::oyyhhhhho````````      :hhhhhhhh /// "
+linhaIni12: string "   ohhhhhhho              .yyyyyyys     "
+linhaIni13: string "   `-------`                            "
 
 Inicio:
+
+call StartScreen
+call printScore
+
 	loadn r0, #1099         ; Posicao inicial
 	loadn r1, #0
+	loadn r2, #0
+	loadn r3, #500
 
 rand: var #40
 	static rand + #0, #141
@@ -84,6 +108,10 @@ main:
 	
 incObs:
 	call Delay
+	inc r2
+	cmp r2, r3
+	jeq WinScreen
+	call PrintScore
 	call printObj
 	call moveCar
 	inc r7
@@ -102,15 +130,15 @@ printObj:
 	loadn r1, #0
 	loadn r2, #10
 	loadn r3, #objs
-	loadn r5, #'0'
+	loadn r5, #'z'
 	loadn r6, #40
 	loadn r7, #' '
 	
 incCountPrintObj:
 	loadi r4, r3
-	outchar r7, r4
+	call ShouldIEraseOrShouldINot
 	add r4, r4, r6
-	outchar r5, r4
+	call ShouldIPrintOrShouldINot
 	cmp r4, r0
 	jeq Lose
 	storei r3, r4
@@ -135,7 +163,7 @@ rts
 printCar:
     push r6
 
-    loadn r6, #2
+    loadn r6, #258
     loadn r7, #40
 
     outchar r6, r0      ; Imprime a primeira parte do carro
@@ -232,7 +260,7 @@ Delay:
 	loadn r3, #0
 	
 loadR1:
-	loadn r1, #1000
+	loadn r1, #250
 	
 decR1:
 	dec r1
@@ -360,20 +388,184 @@ ImprimestrSai:
 
 Lose:
 	call eraseCar
+	call IncApagaTela
+	loadn r0, #602
+	loadn r1, #msgLose
+	loadn r2, #0
+	call Imprimestr
+	call wait_key
 	
+wait_key:
+	push r0
+	push r1
+	loadn r1, #' '
+wait_loop:
+	inchar r0
+	cmp r0, r1
+	jne wait_loop
+	pop r1
+	pop r0
+	call IncApagaTela
+	jmp Inicio
+	
+IncApagaTela:
+	push r0
+	push r1
+	push r2
 	loadn r0, #0
 	loadn r1, #1200
 	loadn r2, #' '
-	
-IncApagaTela:
+ApagaLoop:
 	outchar r2, r0
 	inc r0
 	cmp r0, r1
-	jne IncApagaTela
+	jne ApagaLoop
+	pop r2 
+	pop r1
+	pop r0
+	rts
 	
-	loadn r0, #615
-	loadn r1, #msgLose
+StartScreen:
+	push r0
+	push r1
+	push r2
+	push r3
+	push r4
+	
+	loadn r1, #linhaIni0
+	loadn r2, #0
+	call ImprimeTela
+	
+	loadn r0, #689
+	loadn r1, #msgStart
 	loadn r2, #0	
 	call Imprimestr
+	loadn r4, #' '
+StartLoop:
+	inchar r3
+	cmp r3, r4
+	jne StartLoop
+	call IncApagaTela
+	pop r4
+	pop r3
+	pop r2
+	pop r1
+	pop r0
+rts
 	
-halt
+printScore:
+	loadn r0, #0
+	loadn r1, #msgScore
+	loadn r2, #0	
+	call Imprimestr
+	rts
+
+ShouldIPrintOrShouldINot:
+	push r0
+	loadn r0, #1200
+	cmp r4, r0
+	jeg NotPrint
+	outchar r5, r4
+NotPrint:
+	pop r0
+	rts
+
+ShouldIEraseOrShouldINot:
+	push r0
+	loadn r0, #1200
+	cmp r4, r0
+	jeg NotPrint
+	outchar r7, r4
+NotPrint:
+	pop r0
+	rts
+	
+PrintScore:
+	push r0
+	push r1
+	push r2
+	push r3
+	push r4
+	push r5
+	push r6
+	push r7
+	
+	loadn r0, #83
+	loadn r1, #10
+	loadn r4, #'0'
+	loadn r5, #768
+	
+LoopPrintScore:
+	mod r3, r2, r1
+	add r3, r3, r4
+	add r3, r3, r5
+	outchar r3, r0
+	dec r0
+	jz StopPrintScore
+	div r2, r2, r1
+	jnz LoopPrintScore
+	
+StopPrintScore:
+	
+	pop r7
+	pop r6
+	pop r5
+	pop r4
+	pop r3
+	pop r2
+	pop r1
+	pop r0
+rts
+
+ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
+				;  r1 = endereco onde comeca a primeira linha do Cenario
+				;  r2 = cor do Cenario para ser impresso
+
+	push r0	; protege o r3 na pilha para ser usado na subrotina
+	push r1	; protege o r1 na pilha para preservar seu valor
+	push r2	; protege o r1 na pilha para preservar seu valor
+	push r3	; protege o r3 na pilha para ser usado na subrotina
+	push r4	; protege o r4 na pilha para ser usado na subrotina
+	push r5	; protege o r4 na pilha para ser usado na subrotina
+
+	loadn r0, #80  	; posicao inicial tem que ser o comeco da tela!
+	loadn r3, #40  	; Incremento da posicao da tela!
+	loadn r4, #41  	; incremento do ponteiro das linhas da tela
+	loadn r5, #640 ; Limite da tela!
+	
+   ImprimeTela_Loop:
+		call Imprimestr
+		add r0, r0, r3  	; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
+		add r1, r1, r4  	; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 porcausa do /0 !!) --> r1 = r1 + 41
+		cmp r0, r5			; Compara r0 com 1200
+		jne ImprimeTela_Loop	; Enquanto r0 < 1200
+
+	pop r5	; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r4
+	pop r3
+	pop r2
+	pop r1
+	pop r0
+	rts
+
+WinScreen:
+	loadn r5, #0
+	call IncApagaTela
+	call PrintScore
+	call printScore
+	loadn r0, #607
+	loadn r1, #msgWin
+	loadn r2, #512
+	call Imprimestr
+	call wait_key_2
+
+wait_key_2:
+	push r0
+	push r1
+	loadn r0, #' '
+wait_key_loop_2:
+	inchar r1
+	cmp r1, r0
+	jne wait_key_loop_2
+	call IncApagaTela
+	jmp Inicio
