@@ -116,7 +116,7 @@ incObs:
 	call PrintScore			; Imprime a pontuação
 	call printObj			; Imprime objetos
 	call moveCar			; Movimenta o carro
-	inc r7					; Surgiu, mas funciona
+	inc r7
 
 jmp main
 
@@ -549,8 +549,8 @@ ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
 	pop r1
 	pop r0
 	rts
-
 WinScreen:						;Tela de fim
+
 	loadn r5, #0
 	call IncApagaTela
 	call PrintScore
