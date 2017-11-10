@@ -1,4 +1,6 @@
-	Inicio:
+msgLose: string "You Lose!"
+
+Inicio:
 	loadn r0, #1099         ; Posicao inicial
 	loadn r1, #0
 
@@ -322,6 +324,40 @@ Reset:
 	loadn r1, #0
 rts
 
+Imprimestr:		;  Rotina de Impresao de Mensagens:    
+				; r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso
+				; r1 = endereco onde comeca a mensagem
+				; r2 = cor da mensagem
+				; Obs: a mensagem sera' impressa ate' encontrar "/0"
+				
+;---- Empilhamento: protege os registradores utilizados na subrotina na pilha para preservar seu valor				
+	push r0	; Posicao da tela que o primeiro caractere da mensagem sera' impresso
+	push r1	; endereco onde comeca a mensagem
+	push r2	; cor da mensagem
+	push r3	; Criterio de parada
+	push r4	; Recebe o codigo do caractere da Mensagem
+	
+	loadn r3, #'\0'	; Criterio de parada
+
+ImprimestrLoop:	
+	loadi r4, r1		; aponta para a memoria no endereco r1 e busca seu conteudo em r4
+	cmp r4, r3			; compara o codigo do caractere buscado com o criterio de parada
+	jeq ImprimestrSai	; goto Final da rotina
+	add r4, r2, r4		; soma a cor (r2) no codigo do caractere em r4
+	outchar r4, r0		; imprime o caractere cujo codigo está em r4 na posicao r0 da tela
+	inc r0				; incrementa a posicao que o proximo caractere sera' escrito na tela
+	inc r1				; incrementa o ponteiro para a mensagem na memoria
+	jmp ImprimestrLoop	; goto Loop
+	
+ImprimestrSai:	
+;---- Desempilhamento: resgata os valores dos registradores utilizados na Subrotina da Pilha
+	pop r4	
+	pop r3
+	pop r2
+	pop r1
+	pop r0
+	rts		; retorno da subrotina
+
 Lose:
 	call eraseCar
 	
@@ -335,25 +371,9 @@ IncApagaTela:
 	cmp r0, r1
 	jne IncApagaTela
 	
-	loadn r0, #objs
+	loadn r0, #615
+	loadn r1, #msgLose
+	loadn r2, #0	
+	call Imprimestr
 	
-	loadn r1, #20	
-	storei r0, r1
-	inc r0
-	
-	loadn r1, #56	
-	storei r0, r1
-	inc r0
-	
-	loadn r1, #13	
-	storei r0, r1
-	inc r0
-	
-	loadn r1, #66
-	storei r0, r1
-	inc r0
-	
-	loadn r1, #28
-	storei r0, r1	
-	
-	jmp Inicio
+halt
