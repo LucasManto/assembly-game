@@ -1,4 +1,5 @@
-; Mensagens padr„o
+
+; Mensagens padr√£o
 msgLose: string "You Lose! - Press [Space] to continue"
 msgStart: string "Press [Space] to Start"
 msgScore: string "Score"
@@ -26,11 +27,11 @@ call StartScreen
 call printScore
 
 	loadn r0, #1099         ; Posicao inicial
-	loadn r1, #0			; Contador do vetor de posiÁıes de objetos
-	loadn r2, #0			; Contador da pontuaÁ„o
-	loadn r3, #500			; Limite da pontuaÁ„o
+	loadn r1, #0			; Contador do vetor de posi√ß√µes de objetos
+	loadn r2, #0			; Contador da pontua√ß√£o
+	loadn r3, #500			; Limite da pontua√ß√£o
 
-rand: var #40				; Vetor de posiÁıes aleatÛrias dos objetos
+rand: var #40				; Vetor de posi√ß√µes aleat√≥rias dos objetos
 	static rand + #0, #141
 	static rand + #1, #96
 	static rand + #2, #147
@@ -72,7 +73,7 @@ rand: var #40				; Vetor de posiÁıes aleatÛrias dos objetos
 	static rand + #38, #108
 	static rand + #39, #51
 	
-objs: var #10				; Vetor que armazena os 10 objetos simult‚neos na tela
+objs: var #10				; Vetor que armazena os 10 objetos simult√¢neos na tela
 	static objs + #0, #0
 	static objs + #1, #0
 	static objs + #2, #0
@@ -84,9 +85,9 @@ objs: var #10				; Vetor que armazena os 10 objetos simult‚neos na tela
 	static objs + #8, #0	
 	static objs + #9, #0	
 	
-call LoadVector				; FunÁ„o para carregar o vetor no inicio
+call LoadVector				; Fun√ß√£o para carregar o vetor no inicio
 
-printHighway:				; FunÁ„o que imprime a pista
+printHighway:				; Fun√ß√£o que imprime a pista
 	push r0
 	push r1
 	push r2
@@ -110,10 +111,10 @@ main:
 	
 incObs:
 	call Delay
-	inc r2					; Incremento da pontuaÁ„o
+	inc r2					; Incremento da pontua√ß√£o
 	cmp r2, r3				; Compara para saber se o jogo terminou
 	jeq WinScreen			; Se terminou, pula para a tela de jogo ganho
-	call PrintScore			; Imprime a pontuaÁ„o
+	call PrintScore			; Imprime a pontua√ß√£o
 	call printObj			; Imprime objetos
 	call moveCar			; Movimenta o carro
 	inc r7
@@ -132,9 +133,9 @@ printObj:					; Funcao que imprime os objetos
 	loadn r1, #0			; Inicia o iterador
 	loadn r2, #10			; Limite do iterador
 	loadn r3, #objs			; Armazena a posicao inicial do vetor de objetos
-	loadn r5, #'z'			; Armazena o caractere z para impress„o (foi modificado para um quadrado que È o objeto)
+	loadn r5, #'z'			; Armazena o caractere z para impress√£o (foi modificado para um quadrado que √© o objeto)
 	loadn r6, #40			; Armazena 40 para incremento
-	loadn r7, #' '			; Armazena espaÁo para apagar objeto
+	loadn r7, #' '			; Armazena espa√ßo para apagar objeto
 	
 incCountPrintObj:
 	loadi r4, r3			; Carrega o valor da posicao de r3 para r4
@@ -158,7 +159,7 @@ incCountPrintObj:
 	pop r3
 	pop r2
 	pop r1
-	cgr LoadVector			; Se chegou, chama a funÁ„o que carrega o vetor de objetos
+	cgr LoadVector			; Se chegou, chama a fun√ß√£o que carrega o vetor de objetos
 	
 rts
 
@@ -199,7 +200,7 @@ moveCarL:
     loadn r6, #40
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #10       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao È igual ao valor
+    cmp r7, r6          ; Compara se a posicao √© igual ao valor
     jeq dontMoveL       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -233,7 +234,7 @@ moveCarR:
 
     mod r7, r0, r6      ; Calcula o modulo por 40
     loadn r6, #30       ; Estipula um valor para o carro nao passar
-    cmp r7, r6          ; Compara se a posicao È igual ao valor
+    cmp r7, r6          ; Compara se a posicao √© igual ao valor
     jeq dontMoveR       ; Nao realiza a movimentacao
 
     call eraseCar
@@ -337,7 +338,7 @@ IncLoadVector:
 	storei r5, r6			; Armazena o valor de r6 no vetor de objetos
 	inc r5					; Incrementa r5 para andar com o ponteiro
 	cmp r3, r4				; Compara se iterador chegou ao fim
-	jne IncLoadVector		; Se n„o, volta para o loop
+	jne IncLoadVector		; Se n√£o, volta para o loop
 	
 	loadn r2, #40			; Posicao final do vetor de posicoes
 	cmp r1, r2				; Comprara com o contador de index
@@ -374,7 +375,7 @@ ImprimestrLoop:
 	cmp r4, r3			; compara o codigo do caractere buscado com o criterio de parada
 	jeq ImprimestrSai	; goto Final da rotina
 	add r4, r2, r4		; soma a cor (r2) no codigo do caractere em r4
-	outchar r4, r0		; imprime o caractere cujo codigo est· em r4 na posicao r0 da tela
+	outchar r4, r0		; imprime o caractere cujo codigo est√° em r4 na posicao r0 da tela
 	inc r0				; incrementa a posicao que o proximo caractere sera' escrito na tela
 	inc r1				; incrementa o ponteiro para a mensagem na memoria
 	jmp ImprimestrLoop	; goto Loop
@@ -400,10 +401,10 @@ Lose:						;Funcao de perda
 wait_key:
 	push r0
 	push r1
-	loadn r1, #' '			; Carrega caractere espaÁo
+	loadn r1, #' '			; Carrega caractere espa√ßo
 wait_loop:
 	inchar r0				; Armazena o valor do teclado em r1
-	cmp r0, r1				; Se a tecla for espaÁo
+	cmp r0, r1				; Se a tecla for espa√ßo
 	jne wait_loop			; Se nao, volta para o loop
 	pop r1
 	pop r0
@@ -462,7 +463,7 @@ printScore:						; Imprime o mensagem de score
 	call Imprimestr
 	rts
 
-ShouldIPrintOrShouldINot:		; Verifica se o carro ultrapassou a tela, se n„o, imprime
+ShouldIPrintOrShouldINot:		; Verifica se o carro ultrapassou a tela, se n√£o, imprime
 	push r0
 	loadn r0, #1200
 	cmp r4, r0
@@ -472,7 +473,7 @@ NotPrint:
 	pop r0
 	rts
 
-ShouldIEraseOrShouldINot: 		; Verifica se o carro ultrapassou a tela, se n„o, apaga
+ShouldIEraseOrShouldINot: 		; Verifica se o carro ultrapassou a tela, se n√£o, apaga
 	push r0
 	loadn r0, #1200
 	cmp r4, r0
@@ -549,8 +550,8 @@ ImprimeTela: 	;  Rotina de Impresao de Cenario na Tela Inteira
 	pop r1
 	pop r0
 	rts
+  
 WinScreen:						;Tela de fim
-
 	loadn r5, #0
 	call IncApagaTela
 	call PrintScore
